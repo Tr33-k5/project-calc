@@ -1,7 +1,6 @@
 *{
    margin: 0;
    padding: 0;
-   border: solid black 1px;
 }
 
 html,body{
@@ -22,11 +21,12 @@ header{
 }
 
 .title{
-   font-size: 23px;
    color: white;
+   font-size: 23px;
 }
 
 main{
+   background-color: #E6EAFE;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -49,25 +49,28 @@ main{
 }
 
 .display{
+   background-color: #393756;
+   color: white;
    display: grid;
    grid-template-columns: 100%;
    grid-template-rows: 20% 80%;
+   padding-top: 5%;
+   padding-right: 7%;
 }
 
 .expression{
+   font-size: 30px;
    display: flex;
    justify-content: flex-end;
    align-items: center;
-   margin-right: 5%;
-   font-size: 30px;
 }
 
 .result{
+   font-size: 60px;
+   font-style: italic;
    display: flex;
    justify-content: flex-end;
    align-items: center;
-   margin-right: 5%;
-   font-size: 60px;
 }
 
 .commands{
@@ -80,7 +83,7 @@ main{
    grid-column: 1 / 2;
    grid-row: 2 / 3;
    display: grid;
-   grid-template-columns: repeat(3,33%);
+   grid-template-columns: repeat(3,33.4%);
    grid-template-rows: repeat(4,25%);
 }
 
@@ -89,6 +92,7 @@ main{
 }
 
 .num{
+   background-color: #574D99;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -109,9 +113,25 @@ main{
 }
 
 .operator{
+   background-color: #6B82F2;
    display: flex;
    justify-content: center;
    align-items: center;
+}
+
+.button{
+   border: 1px solid rgba(255,255,255,0.2);
+   color: white;
+   font-size: 26px;
+   font-weight: bold;
+}
+
+.button:hover{
+   filter: brightness(110%);
+}
+
+.button:active{
+   filter: brightness(90%);
 }
 
 footer{
@@ -122,6 +142,6 @@ footer{
 }
 
 .copyright{
-   font-size: 15px;
    color: white;
+   font-size: 15px;
 }

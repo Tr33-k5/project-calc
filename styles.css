@@ -41,21 +41,20 @@ main{
    background-color: #393756;
    color: white;
    display: grid;
-   grid-template-columns: 100%;
-   grid-template-rows: 20% 80%;
-   padding-top: 5%;
-   padding-right: 7%;
+   grid-template-rows: 20% 50% 30%;
+   padding: 5%;
 }
 
 .expression{
-   font-size: 30px;
+   font-size: 20px;
    display: flex;
    justify-content: flex-end;
    align-items: center;
 }
 
 .result{
-   font-size: 60px;
+   grid-row: 3 / 4;
+   font-size: 40px;
    font-style: italic;
    display: flex;
    justify-content: flex-end;

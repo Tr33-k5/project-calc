@@ -1,16 +1,20 @@
-const displayExpression = document.getElementById('expression');
-const displayResult = document.getElementById('result');
+const expressionElem = document.getElementById('expression');
+const resultElem = document.getElementById('result');
 const displayableButtons = document.querySelectorAll('.displayable');
 const operatorButtons = document.getElementsByName('operators');
-const allClearButton = document.getElementById('clear');
-const clearButton = document.getElementById('sign');
+const acButton = document.getElementById('clear');
+const cButton = document.getElementById('sign');
 const equalButton = document.getElementById('equal');
 let operand1,operand2,operator;
 
 const sum = (x,y) => (x + y);
+
 const subtract = (x,y) => (x - y);
+
 const multiply = (x,y) => (x * y);
+
 const divide = (x,y) => (x / y);
+
 const operate = (operator,operand1,operand2) => {
    switch (operator) {
       case '+':
@@ -33,28 +37,43 @@ const operate = (operator,operand1,operand2) => {
         break;
     }  
 }
-const display = (content) => displayExpression.textContent += ' '+content;
-const allClear = () => {
-   displayExpression.textContent = '';
-   displayResult.textContent = '';
+
+const displayExpression = (expression) => {
+   if(resultElem.textContent === '0'){ 
+      resultElem.textContent = expression;
+      return
+   }
+   resultElem.textContent += expression;
 }
-const clear = () => displayExpression.textContent = (displayExpression.textContent).slice(0, -2);
+
+const clearAll = () => {
+   expressionElem.textContent = '';
+   resultElem.textContent = '0';
+}
+
+const clearOne = () => {
+   resultElem.textContent = (resultElem.textContent).slice(0, -1);
+   if(resultElem.textContent === ''){ resultElem.textContent = '0'; }
+}
 
 function getTerms(){
-   let expression = displayExpression.textContent.split('');
+   let expression = resultElem.textContent.split('');
    expression = expression.filter(entry => entry.trim() != '');
    operator = expression.pop();
    operand1 = expression.join('');
+   return {operator,operand1};
+   /*
    console.log('operand: '+operand1);
    console.log('operator: '+operator);
+   */
 }
 
-displayableButtons.forEach(button => button.addEventListener('click',() => display(button.textContent)));
+displayableButtons.forEach(button => button.addEventListener('click',() => displayExpression(button.textContent)));
 
 operatorButtons.forEach(button => button.addEventListener('click',() => getTerms()));
 
-allClearButton.addEventListener('click',() => allClear());
+acButton.addEventListener('click',() => clearAll());
 
-clearButton.addEventListener('click',() => clear());
+cButton.addEventListener('click',() => clearOne());
 
 equalButton.addEventListener('click',() => getTerms());

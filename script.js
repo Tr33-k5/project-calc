@@ -5,45 +5,42 @@ const operatorButtons = document.getElementsByName('operators');
 const acButton = document.getElementById('clear');
 const cButton = document.getElementById('sign');
 const equalButton = document.getElementById('equal');
-let operand1,operand2,operator;
+let firstOperand,secondOperand,theOperator;
 
-const sum = (x,y) => (x + y);
+const sum = (x,y) => (+x)+(+y);
 
-const subtract = (x,y) => (x - y);
+const subtract = (x,y) => (+x)-(+y);
 
-const multiply = (x,y) => (x * y);
+const multiply = (x,y) => (+x)*(+y);
 
-const divide = (x,y) => (x / y);
+const divide = (x,y) => (+x)/(+y);
 
-const operate = (operator,operand1,operand2) => {
+const operate = (operator,x,y) => {
    switch (operator) {
       case '+':
-        sum(operand1,operand2);
-        break;
+        return sum(x,y);
       case '-':
-         subtract(operand1,operand2);
-        break;
+         return subtract(x,y);
       case '*':
-         multiply(operand1,operand2);
-        break;
+         return multiply(x,y);
       case '*':
-         sum(operand1,operand2);
-      break;
+         return sum(x,y);
       case '/':
-         divide(operand1,operand2);
-         break; 
+         return divide(x,y); 
       default:
         console.console.log(('ERROR'));
         break;
     }  
 }
 
-const displayExpression = (expression) => {
+const displayExpression = (string) => expressionElem.textContent = string;
+
+const displayResult = (string) => {
    if(resultElem.textContent === '0'){ 
-      resultElem.textContent = expression;
+      resultElem.textContent = string;
       return
    }
-   resultElem.textContent += expression;
+   resultElem.textContent += string;
 }
 
 const clearAll = () => {
@@ -56,24 +53,47 @@ const clearOne = () => {
    if(resultElem.textContent === ''){ resultElem.textContent = '0'; }
 }
 
-function getTerms(){
-   let expression = resultElem.textContent.split('');
-   expression = expression.filter(entry => entry.trim() != '');
-   operator = expression.pop();
-   operand1 = expression.join('');
-   return {operator,operand1};
-   /*
-   console.log('operand: '+operand1);
-   console.log('operator: '+operator);
-   */
+function checkOperatorToOperate(operator){
+   const expression = resultElem.textContent;
+   const checkFor = ['+','-','*','/'];
+   const arrayExpression = expression.split('');
+   // check if the expression has an operator in it
+   const hasSome = checkFor.some(item => arrayExpression.includes(item));
+
+   //true => operate()
+   if(hasSome){
+      // Get the displayed operator
+      theOperator = checkFor.find(item => arrayExpression.includes(item));
+      let index = arrayExpression.indexOf(theOperator);
+
+      // Get the displayed first operand
+      const arrayFirstOperand = arrayExpression.slice(0,index);
+      firstOperand = arrayFirstOperand.join('');
+
+      // Get the displayed second operand
+      index += 1;
+      const arraySecondOperand = arrayExpression.slice(index);
+      secondOperand = arraySecondOperand.join('');
+
+      displayExpression(resultElem.textContent);
+
+      let result = operate(theOperator,firstOperand,secondOperand);
+      resultElem.textContent = result;
+
+      displayResult(operator);
+   }
+   //false => display pressed operator
+   else{
+      displayResult(operator);
+   }
 }
 
-displayableButtons.forEach(button => button.addEventListener('click',() => displayExpression(button.textContent)));
+displayableButtons.forEach(button => button.addEventListener('click',() => displayResult(button.textContent)));
 
-operatorButtons.forEach(button => button.addEventListener('click',() => getTerms()));
+operatorButtons.forEach(button => button.addEventListener('click',() => checkOperatorToOperate(button.textContent)));
 
 acButton.addEventListener('click',() => clearAll());
 
 cButton.addEventListener('click',() => clearOne());
 
-equalButton.addEventListener('click',() => getTerms());
+equalButton.addEventListener('click',() => checkExpressionToOperate());

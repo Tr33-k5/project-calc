@@ -36,7 +36,8 @@ const operate = (operator,x,y) => {
 const displayExpression = (string) => expressionElem.textContent = string;
 
 const displayResult = (string) => {
-   if(resultElem.textContent === '0'){ 
+
+   if(+string === +string && resultElem.textContent === '0'){ 
       resultElem.textContent = string;
       return
    }

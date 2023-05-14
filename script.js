@@ -88,6 +88,36 @@ function checkOperatorToOperate(operator){
    }
 }
 
+function checkExpressionToOperate(){
+   const expression = resultElem.textContent;
+   const checkFor = ['+','-','*','/'];
+   const arrayExpression = expression.split('');
+   // check if the expression has an operator in it
+   const hasSome = checkFor.some(item => arrayExpression.includes(item));
+
+   //true => operate()
+   if(hasSome){
+      // Get the displayed operator
+      theOperator = checkFor.find(item => arrayExpression.includes(item));
+      let index = arrayExpression.indexOf(theOperator);
+
+      // Get the displayed first operand
+      const arrayFirstOperand = arrayExpression.slice(0,index);
+      firstOperand = arrayFirstOperand.join('');
+
+      // Get the displayed second operand
+      index += 1;
+      const arraySecondOperand = arrayExpression.slice(index);
+      secondOperand = arraySecondOperand.join('');
+
+      displayExpression(resultElem.textContent);
+
+      let result = operate(theOperator,firstOperand,secondOperand);
+      resultElem.textContent = result;
+   }
+   return
+}
+
 displayableButtons.forEach(button => button.addEventListener('click',() => displayResult(button.textContent)));
 
 operatorButtons.forEach(button => button.addEventListener('click',() => checkOperatorToOperate(button.textContent)));

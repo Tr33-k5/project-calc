@@ -1,9 +1,9 @@
 const expressionElem = document.getElementById('expression');
 const resultElem = document.getElementById('result');
-const displayableButtons = document.querySelectorAll('.displayable');
-const operatorButtons = document.getElementsByName('operators');
-const acButton = document.getElementById('clear');
-const cButton = document.getElementById('sign');
+const displayableButtons = document.getElementsByName('displayable-button');
+const operatorButtons = document.getElementsByName('operator-button');
+const acButton = document.getElementById('allclear');
+const cButton = document.getElementById('clear');
 const equalButton = document.getElementById('equal');
 let firstOperand,secondOperand,theOperator;
 

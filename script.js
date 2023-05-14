@@ -7,13 +7,36 @@ const cButton = document.getElementById('clear');
 const equalButton = document.getElementById('equal');
 let firstOperand,secondOperand,theOperator;
 
-const sum = (x,y) => (+x)+(+y);
+const sum = (x,y) => {
+   let res = (+x)+(+y);
+   if(res % 1 != 0){
+      return res.toFixed(2);
+   }  
+   else return res;
+}
+const subtract = (x,y) => {
+   let res = (+x)-(+y);
+   if(res % 1 != 0){
+      return res.toFixed(2);
+   }  
+   else return res;
+}
 
-const subtract = (x,y) => (+x)-(+y);
+const multiply = (x,y) => {
+   let res = (+x)*(+y);
+   if(res % 1 != 0){
+      return res.toFixed(2);
+   }  
+   else return res;
+}
 
-const multiply = (x,y) => (+x)*(+y);
-
-const divide = (x,y) => (+x)/(+y);
+const divide = (x,y) => {
+   let res = (+x)/(+y);
+   if(res % 1 != 0){
+      return res.toFixed(2);
+   }  
+   else return res;
+}
 
 const operate = (operator,x,y) => {
    switch (operator) {

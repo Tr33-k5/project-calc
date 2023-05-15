@@ -94,8 +94,14 @@ function checkOperatorToOperate(operator){
       const arrayFirstOperand = arrayExpression.slice(0,index);
       firstOperand = arrayFirstOperand.join('');
 
-      // Get the displayed second operand
+      // Check if there's a second operand
       index += 1;
+      if(arrayExpression.length === index){
+         resultElem.textContent = firstOperand+operator;
+         return;
+      }
+
+      // Get the displayed second operand
       const arraySecondOperand = arrayExpression.slice(index);
       secondOperand = arraySecondOperand.join('');
 

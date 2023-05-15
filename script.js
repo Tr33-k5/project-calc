@@ -46,10 +46,13 @@ const operate = (operator,x,y) => {
          return subtract(x,y);
       case '*':
          return multiply(x,y);
-      case '*':
-         return sum(x,y);
       case '/':
-         return divide(x,y); 
+         if(y === '0'){
+            expressionElem.textContent = 'お前はもう死んでいる';
+            resultElem.textContent = 'Omae Wa Mou Shindeiru';
+            return 'nani?!'
+         }
+         else return divide(x,y); 
       default:
         console.console.log(('ERROR'));
         break;
@@ -104,12 +107,10 @@ function checkOperatorToOperate(operator){
       // Get the displayed second operand
       const arraySecondOperand = arrayExpression.slice(index);
       secondOperand = arraySecondOperand.join('');
-
       displayExpression(resultElem.textContent);
 
       let result = operate(theOperator,firstOperand,secondOperand);
       resultElem.textContent = result;
-
       displayResult(operator);
    }
    //false => display pressed operator
@@ -140,15 +141,16 @@ function checkExpressionToOperate(){
          result = operate('*',firstOperand,'0.01');
       }
       else{
-      // Get the displayed second operand
-      index += 1;
-      const arraySecondOperand = arrayExpression.slice(index);
-      secondOperand = arraySecondOperand.join('');
+         // Get the displayed second operand
+         index += 1;
+         const arraySecondOperand = arrayExpression.slice(index);
+         secondOperand = arraySecondOperand.join('');
          result = operate(theOperator,firstOperand,secondOperand);
       }
 
+      if(result === 'nani?!'){return}
+      
       displayExpression(resultElem.textContent);
-
       resultElem.textContent = result;
    }
 }

@@ -5,6 +5,7 @@ const operatorButtons = document.getElementsByName('operator-button');
 const acButton = document.getElementById('allclear');
 const cButton = document.getElementById('clear');
 const equalButton = document.getElementById('equal');
+const pointButton = document.getElementById('point');
 let firstOperand,secondOperand,theOperator;
 
 const sum = (x,y) => {
@@ -155,12 +156,36 @@ function checkExpressionToOperate(){
    }
 }
 
-displayableButtons.forEach(button => button.addEventListener('click',() => displayResult(button.textContent)));
+displayableButtons.forEach(button => button.addEventListener('click',() => {
+   displayResult(button.textContent);
+   if(button.id === 'point'){
+      pointButton.setAttribute("disabled", "disabled");
+      equalButton.setAttribute("disabled", "disabled");
+      operatorButtons.forEach(button => button.setAttribute("disabled", "disabled"));
+   }
+   else{
+      equalButton.removeAttribute("disabled");
+      operatorButtons.forEach(button => button.removeAttribute("disabled"));
+   }
+}));
 
-operatorButtons.forEach(button => button.addEventListener('click',() => checkOperatorToOperate(button.textContent)));
+operatorButtons.forEach(button => button.addEventListener('click',() => {
+   checkOperatorToOperate(button.textContent);
+   pointButton.removeAttribute("disabled");
+}));
 
-acButton.addEventListener('click',() => clearAll());
+acButton.addEventListener('click',() => {
+   clearAll();
+   pointButton.removeAttribute("disabled");
+   operatorButtons.forEach(button => button.removeAttribute("disabled"));
+});
 
-cButton.addEventListener('click',() => clearOne());
+cButton.addEventListener('click',() => {
+   clearOne();
+   pointButton.removeAttribute("disabled");
+});
 
-equalButton.addEventListener('click',() => checkExpressionToOperate());
+equalButton.addEventListener('click',() => {
+   checkExpressionToOperate();
+   pointButton.removeAttribute("disabled");
+});

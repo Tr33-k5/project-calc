@@ -79,7 +79,7 @@ const clearOne = () => {
 
 function checkOperatorToOperate(operator){
    const expression = resultElem.textContent;
-   const checkFor = ['+','-','*','/'];
+   const checkFor = ['+','-','*','/','%'];
    const arrayExpression = expression.split('');
    // check if the expression has an operator in it
    const hasSome = checkFor.some(item => arrayExpression.includes(item));
@@ -120,7 +120,7 @@ function checkOperatorToOperate(operator){
 
 function checkExpressionToOperate(){
    const expression = resultElem.textContent;
-   const checkFor = ['+','-','*','/'];
+   const checkFor = ['+','-','*','/','%'];
    const arrayExpression = expression.split('');
    // check if the expression has an operator in it
    const hasSome = checkFor.some(item => arrayExpression.includes(item));
@@ -135,17 +135,22 @@ function checkExpressionToOperate(){
       const arrayFirstOperand = arrayExpression.slice(0,index);
       firstOperand = arrayFirstOperand.join('');
 
+      let result;
+      if(theOperator === '%'){
+         result = operate('*',firstOperand,'0.01');
+      }
+      else{
       // Get the displayed second operand
       index += 1;
       const arraySecondOperand = arrayExpression.slice(index);
       secondOperand = arraySecondOperand.join('');
+         result = operate(theOperator,firstOperand,secondOperand);
+      }
 
       displayExpression(resultElem.textContent);
 
-      let result = operate(theOperator,firstOperand,secondOperand);
       resultElem.textContent = result;
    }
-   return
 }
 
 displayableButtons.forEach(button => button.addEventListener('click',() => displayResult(button.textContent)));

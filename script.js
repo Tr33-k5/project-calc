@@ -8,17 +8,32 @@ const equalButton = document.getElementById('equal');
 const pointButton = document.getElementById('point');
 let firstOperand,secondOperand,theOperator;
 
+function countDecimals(decimal){
+   let num = parseFloat(decimal); // First convert to number to check if whole
+   if(Number.isInteger(num) === true){ return 0 }
+   let text = num.toString(); // Convert back to string and check for "1e-8" numbers
+   if(text.indexOf('e-') > -1){
+      let [base, trail] = text.split('e-');
+      let deg = parseInt(trail, 10);
+      return deg;
+   }
+   else{
+      let index = text.indexOf(".");
+      return text.length - index - 1; // Otherwise use simple string function to count
+   }
+}
+
 const sum = (x,y) => {
    let res = (+x)+(+y);
    if(res % 1 != 0){
-      return res.toFixed(2);
+      return res.toFixed(countDecimals(res));
    }  
    else return res;
 }
 const subtract = (x,y) => {
    let res = (+x)-(+y);
    if(res % 1 != 0){
-      return res.toFixed(2);
+      return res.toFixed(countDecimals(res));
    }  
    else return res;
 }
@@ -26,7 +41,7 @@ const subtract = (x,y) => {
 const multiply = (x,y) => {
    let res = (+x)*(+y);
    if(res % 1 != 0){
-      return res.toFixed(2);
+      return res.toFixed(countDecimals(res));
    }  
    else return res;
 }
@@ -34,7 +49,7 @@ const multiply = (x,y) => {
 const divide = (x,y) => {
    let res = (+x)/(+y);
    if(res % 1 != 0){
-      return res.toFixed(2);
+      return res.toFixed(countDecimals(res));
    }  
    else return res;
 }
@@ -187,5 +202,5 @@ cButton.addEventListener('click',() => {
 
 equalButton.addEventListener('click',() => {
    checkExpressionToOperate();
-   pointButton.removeAttribute("disabled");
+   pointButton.setAttribute("disabled", "disabled");
 });

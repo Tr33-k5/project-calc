@@ -202,5 +202,5 @@ cButton.addEventListener('click',() => {
 
 equalButton.addEventListener('click',() => {
    checkExpressionToOperate();
-   pointButton.setAttribute("disabled", "disabled");
+   pointButton.removeAttribute("disabled");
 });

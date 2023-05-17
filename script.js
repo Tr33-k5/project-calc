@@ -1,5 +1,5 @@
-const expressionElem = document.getElementById('expression');
-const resultElem = document.getElementById('result');
+const secondaryView = document.getElementById('secondary-view');
+const mainView = document.getElementById('main-view');
 const displayableButtons = document.getElementsByName('displayable-button');
 const operatorButtons = document.getElementsByName('operator-button');
 const acButton = document.getElementById('allclear');
@@ -9,7 +9,7 @@ const pointButton = document.getElementById('point');
 const pourcentButton = document.getElementById('pourcent');
 let firstOperand,secondOperand,theOperator;
 
-function countDecimals(decimal){
+const countDecimals = (decimal) => {
    // First convert to number to check if whole
    let num = parseFloat(decimal);
    if(Number.isInteger(num) === true){ return 0 }
@@ -27,6 +27,16 @@ function countDecimals(decimal){
    }
 }
 
+const displayToSecondaryView = (string) => secondaryView.textContent = string;
+
+const displayToMainView = (string) => mainView.textContent = string;
+
+const addToMainView = (string) => {
+   if(+string === +string && mainView.textContent != '0' || +string != +string) { 
+      mainView.textContent += string;
+   }
+}
+
 const hasPourcent = (array) => {
    const hasPourcent = ['%'].some(item => array.includes(item));
    if(hasPourcent){ 
@@ -39,6 +49,9 @@ const hasPourcent = (array) => {
 const sum = (x,y) => {
    let res = (+x)+(+y);
    if(res % 1 != 0){
+      if(countDecimals(res) > 2) {
+         return res.toFixed(2);
+      }
       return res.toFixed(countDecimals(res));
    }  
    else return res;
@@ -46,6 +59,9 @@ const sum = (x,y) => {
 const subtract = (x,y) => {
    let res = (+x)-(+y);
    if(res % 1 != 0){
+      if(countDecimals(res) > 2) {
+         return res.toFixed(2);
+      }
       return res.toFixed(countDecimals(res));
    }  
    else return res;
@@ -54,6 +70,9 @@ const subtract = (x,y) => {
 const multiply = (x,y) => {
    let res = (+x)*(+y);
    if(res % 1 != 0){
+      if(countDecimals(res) > 2) {
+         return res.toFixed(2);
+      }
       return res.toFixed(countDecimals(res));
    }  
    else return res;
@@ -62,6 +81,9 @@ const multiply = (x,y) => {
 const divide = (x,y) => {
    let res = (+x)/(+y);
    if(res % 1 != 0){
+      if(countDecimals(res) > 2) {
+         return res.toFixed(2);
+      }
       return res.toFixed(countDecimals(res));
    }  
    else return res;
@@ -77,47 +99,38 @@ const operate = (operator,x,y) => {
          return multiply(x,y);
       case '/':
          if(y === '0'){
-            expressionElem.textContent = 'お前はもう死んでいる';
-            resultElem.textContent = 'Omae Wa Mou Shindeiru';
+            displayToSecondaryView('お前はもう死んでいる');
+            displayToMainView('Omae Wa Mou Shindeiru');
             return 'nani?!'
          }
          else return divide(x,y); 
       default:
-        console.console.log(('ERROR'));
+         displayToMainView('ERROR');
         break;
     }  
 }
 
-const displayExpression = (string) => expressionElem.textContent = string;
-
-const displayResult = (string) => {
-
-   if(+string === +string && resultElem.textContent === '0'){ 
-      resultElem.textContent = string;
-      return
-   }
-   resultElem.textContent += string;
-}
-
 const clearAll = () => {
-   expressionElem.textContent = '';
-   resultElem.textContent = '0';
+   displayToSecondaryView('');
+   displayToMainView('0');
 }
 
 const clearOne = () => {
-   resultElem.textContent = (resultElem.textContent).slice(0, -1);
-   if(resultElem.textContent === ''){ resultElem.textContent = '0'; }
+   displayToMainView((mainView.textContent).slice(0, -1));
+   if(mainView.textContent === '') {
+      displayToMainView('0');
+   }
 }
 
-function checkOperatorToOperate(operator){
-   const expression = resultElem.textContent;
+const checkOperatorToOperate = (operator) => {
+   const expression = mainView.textContent;
    const checkFor = ['+','-','*','/'];
    const arrayExpression = expression.split('');
    // check if the expression has an operator in it
    const hasSome = checkFor.some(item => arrayExpression.includes(item));
 
    //true => operate()
-   if(hasSome){
+   if(hasSome) {
       // Get the displayed operator
       theOperator = checkFor.find(item => arrayExpression.includes(item));
       let index = arrayExpression.indexOf(theOperator);
@@ -128,68 +141,75 @@ function checkOperatorToOperate(operator){
 
       // Check if there's a second operand
       index += 1;
-      if(arrayExpression.length === index){
-         resultElem.textContent = firstOperand+operator;
+      if(arrayExpression.length > index) {
+         // Get the displayed second operand
+         const arraySecondOperand = arrayExpression.slice(index);
+         secondOperand = hasPourcent(arraySecondOperand);
+      }
+      else {
+         mainView.textContent = firstOperand+operator;
          return;
       }
-
-      // Get the displayed second operand
-      const arraySecondOperand = arrayExpression.slice(index);
-      secondOperand = hasPourcent(arraySecondOperand);
-
-      displayExpression(resultElem.textContent);
+      
+      displayToSecondaryView(mainView.textContent);
 
       let result = operate(theOperator,firstOperand,secondOperand);
-      resultElem.textContent = result;
-      displayResult(operator);
+      if(+result === +result && mainView.textContent === '0') {
+         displayToMainView(result);
+      }
+      displayToMainView(result);
+      addToMainView(operator);
    }
    //false => display pressed operator
-   else{
-      displayResult(operator);
+   else {
+      addToMainView(operator);
    }
 }
 
-function checkExpressionToOperate(){
-   const expression = resultElem.textContent;
+const checkExpressionToOperate = () => {
+   const expression = mainView.textContent;
    const checkForOperator = ['+','-','*','/'];
    const arrayExpression = expression.split('');
    // check if the expression has an operator in it
    const hasSome = checkForOperator.some(item => arrayExpression.includes(item));
 
    //true => operate()
-   if(hasSome){
+   if(hasSome) {
       // Get the displayed operator
       theOperator = checkForOperator.find(item => arrayExpression.includes(item));
       let index = arrayExpression.indexOf(theOperator);
 
       // Get the displayed first operand
       const arrayFirstOperand = arrayExpression.slice(0,index);
-
       firstOperand = hasPourcent(arrayFirstOperand);
 
       // Get the displayed second operand
       index += 1;
       const arraySecondOperand = arrayExpression.slice(index);
-
       secondOperand = hasPourcent(arraySecondOperand);
 
       result = operate(theOperator,firstOperand,secondOperand);
+      if(result === 'nani?!') { return }
 
-      if(result === 'nani?!'){return}
-      
-      displayExpression(resultElem.textContent);
-      resultElem.textContent = result;
+      displayToSecondaryView(mainView.textContent);
+      displayToMainView(result);
    }
-      //true => operate with one operand only
-      else{
-         firstOperand = hasPourcent(arrayExpression);
-         let result = operate('+',firstOperand,'0');
-         resultElem.textContent = result;
-      }
+   //true => operate with one operand only
+   else {
+      firstOperand = hasPourcent(arrayExpression);
+      let result = operate('+',firstOperand,'0');
+      displayToMainView(result);
+   }
 }
 
 displayableButtons.forEach(button => button.addEventListener('click',() => {
-   displayResult(button.textContent);
+   let value = button.value;
+   if(+value === +value && mainView.textContent === '0') {
+      displayToMainView(value);
+   }
+   else {
+      addToMainView(value);
+   }
    if(button.id === 'point'){
       // disable .button, =button, operator buttons
       pointButton.setAttribute("disabled", "disabled");
@@ -234,7 +254,7 @@ equalButton.addEventListener('click',() => {
 });
 
 pourcentButton.addEventListener('click',() => {
-   displayResult(pourcentButton.textContent);
+   addToMainView(pourcentButton.value);
    // Disable %button, .button, numpad buttons
    pourcentButton.setAttribute("disabled", "disabled");
    pointButton.setAttribute("disabled", "disabled");

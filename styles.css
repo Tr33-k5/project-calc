@@ -45,17 +45,17 @@ main{
    padding: 5%;
 }
 
-.expression{
-   font-size: 20px;
+.main-view{
+   grid-row: 3 / 4;
+   font-size: 40px;
+   font-style: italic;
    display: flex;
    justify-content: flex-end;
    align-items: center;
 }
 
-.result{
-   grid-row: 3 / 4;
-   font-size: 40px;
-   font-style: italic;
+.secondary-view{
+   font-size: 20px;
    display: flex;
    justify-content: flex-end;
    align-items: center;
